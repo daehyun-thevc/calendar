@@ -12,6 +12,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@iconify-json/jam": "^1.1.4",
     "@nuxt/devtools": "latest",
     "@nuxthq/ui": "^2.5.0",
     "@prisma/client": "4.16.2",
