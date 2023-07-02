@@ -1,4 +1,23 @@
 <script lang="ts" setup>
+type Props = {
+  newItem: {
+    done: boolean;
+    title: string;
+    id: number;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+const props = defineProps<Props>();
+watch(
+  () => props.newItem,
+  (newItem) => {
+    if (newItem === null) return;
+    events.value = [...events.value, newItem];
+  }
+);
+
 const { data, error, pending } = await useFetch("/api/event/all");
 const events = ref<NonNullable<typeof data.value>>([]);
 watch(

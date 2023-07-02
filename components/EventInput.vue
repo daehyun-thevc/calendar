@@ -1,22 +1,34 @@
 <script lang="ts" setup>
 const newEvent = ref("");
 const input = ref<ComponentPublicInstance | null>(null);
-const addNewEvent = () => {
+const addNewEvent = async () => {
   const trimmed = newEvent.value.trim();
   if (trimmed === "") return;
-  $fetch("/api/event", {
+  const result = await $fetch("/api/event", {
     method: "POST",
     body: {
       title: trimmed,
-      description: "",
     },
   });
+  emits("addItem", result);
 };
 defineShortcuts({
   "/": () => {
     (input.value!.$refs.input as HTMLInputElement).focus();
   },
 });
+const emits = defineEmits<{
+  addItem: [
+    item: {
+      done: boolean;
+      title: string;
+      id: number;
+      description: string;
+      createdAt: string;
+      updatedAt: string;
+    }
+  ];
+}>();
 </script>
 
 <template>
@@ -27,8 +39,7 @@ defineShortcuts({
         size="md"
         color="white"
         :trailing="false"
-        :model-value="newEvent"
-        @update:model-value="newEvent = $event"
+        v-model="newEvent"
         autofocus
         ref="input"
       />
