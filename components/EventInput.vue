@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const newEvent = ref("");
+const input = ref<ComponentPublicInstance | null>(null);
 const addNewEvent = () => {
   const trimmed = newEvent.value.trim();
   if (trimmed === "") return;
@@ -11,6 +12,11 @@ const addNewEvent = () => {
     },
   });
 };
+defineShortcuts({
+  "/": () => {
+    (input.value!.$refs.input as HTMLInputElement).focus();
+  },
+});
 </script>
 
 <template>
@@ -24,6 +30,7 @@ const addNewEvent = () => {
         :model-value="newEvent"
         @update:model-value="newEvent = $event"
         autofocus
+        ref="input"
       />
     </div>
     <UButton @click="addNewEvent()">등록</UButton>
