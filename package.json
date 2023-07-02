@@ -19,5 +19,8 @@
     "@types/node": "^18",
     "nuxt": "^3.6.1",
     "prisma": "^4.16.2"
+  },
+  "dependencies": {
+    "@vueuse/components": "^10.2.1"
   }
 }

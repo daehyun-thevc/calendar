@@ -1,30 +1,73 @@
 <script lang="ts" setup>
+import { vOnClickOutside } from "@vueuse/components";
+
 type Props = {
   id: number;
   title: string;
   done: boolean;
 };
-const { id, done } = defineProps<Props>();
-const status = ref(done);
-watch(status, (newStatus) => {
-  $fetch(`/api/event/${id}`, {
+
+const props = defineProps<Props>();
+const title = ref(props.title);
+const done = ref(props.done);
+const isTitleEditing = ref(false);
+const updateEvent = (body: Partial<Exclude<Props, "id">>) => {
+  $fetch(`/api/event/${props.id}`, {
     method: "PATCH",
-    body: { done: newStatus },
+    body,
   });
-});
+};
 </script>
 
 <template>
   <div
-    class="flex items-center justify-between gap-4 border rounded-md p-2"
+    class="border rounded-md py-2 px-4"
     :class="{
-      'border-gray-300 text-gray-300': status,
-      'border-green-300': !status,
+      'border-gray-400 text-gray-400': done,
+      'border-green-500 text-green-500': !done,
     }"
   >
-    <div class="flex items-center gap-4">
-      <UIcon name="i-jam-tag" class="text-gray-400" /> {{ title }}
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <UIcon name="i-jam-tag-f" />
+        <div
+          v-if="!isTitleEditing"
+          @click="isTitleEditing = true"
+          class="px-3 py-2 cursor-pointer"
+          :class="{ 'text-black': !done }"
+        >
+          {{ title }}
+        </div>
+        <div
+          v-else
+          class="flex gap-2"
+          v-on-click-outside="() => (isTitleEditing = false)"
+        >
+          <UInput
+            v-model="title"
+            variant="none"
+            autofocus
+            size="md"
+            :ui="{ size: { md: 'text-md' } }"
+          />
+          <UButton
+            @click="
+              () => {
+                updateEvent({ title });
+                isTitleEditing = false;
+              }
+            "
+          >
+            수정
+          </UButton>
+        </div>
+      </div>
+      <UToggle
+        v-model="done"
+        @update:model-value="updateEvent({ done: $event })"
+        on-icon="i-jam-check"
+        off-icon="i-jam-close"
+      />
     </div>
-    <UToggle v-model="status" on-icon="i-jam-check" off-icon="i-jam-close" />
   </div>
 </template>

@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const id = parseInt(getRouterParam(event, "id")!);
-  const { done } = await readBody(event);
+  const body = await readBody(event);
   return prisma.event.update({
     where: { id },
-    data: { done },
+    data: body,
   });
 });
