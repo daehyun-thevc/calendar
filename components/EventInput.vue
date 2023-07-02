@@ -15,7 +15,7 @@ const addNewEvent = () => {
 
 <template>
   <div class="flex gap-2 justify-center">
-    <div class="flex-1 max-w-[400px]">
+    <div class="flex-1">
       <UInput
         icon="i-jam-write"
         size="md"
