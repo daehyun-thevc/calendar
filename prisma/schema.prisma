@@ -10,10 +10,9 @@ generator client {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  done        Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  title     String
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
