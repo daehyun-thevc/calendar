@@ -17,6 +17,15 @@ const updateEvent = (body: Partial<Exclude<Props, "id">>) => {
     body,
   });
 };
+const emits = defineEmits<{
+  delete: [id: number];
+}>();
+const deleteEvent = (id: number) => {
+  $fetch(`/api/event/${props.id}`, {
+    method: "DELETE",
+  });
+  emits("delete", id);
+};
 </script>
 
 <template>
@@ -29,7 +38,12 @@ const updateEvent = (body: Partial<Exclude<Props, "id">>) => {
   >
     <div class="flex items-center justify-between gap-4">
       <div class="flex items-center gap-4">
-        <UIcon name="i-jam-tag-f" />
+        <UToggle
+          v-model="done"
+          @update:model-value="updateEvent({ done: $event })"
+          on-icon="i-jam-check"
+          off-icon="i-jam-close"
+        />
         <div
           v-if="!isTitleEditing"
           @click="isTitleEditing = true"
@@ -62,11 +76,10 @@ const updateEvent = (body: Partial<Exclude<Props, "id">>) => {
           </UButton>
         </div>
       </div>
-      <UToggle
-        v-model="done"
-        @update:model-value="updateEvent({ done: $event })"
-        on-icon="i-jam-check"
-        off-icon="i-jam-close"
+      <UIcon
+        name="i-jam-trash"
+        class="text-gray-300 hover:text-red-400 cursor-pointer text-lg"
+        @click="deleteEvent(id)"
       />
     </div>
   </div>

@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 type Props = {
   newItem: {
-    done: boolean;
-    title: string;
     id: number;
-    description: string;
+    title: string;
+    done: boolean;
+    startedAt: string;
+    endedAt: string;
     createdAt: string;
     updatedAt: string;
   } | null;
@@ -31,12 +32,15 @@ watch(
   },
   { immediate: true }
 );
+const deleteEvent = (id: number) => {
+  events.value = events.value.filter((event) => event.id !== id);
+};
 </script>
 
 <template>
   <ul class="flex flex-col gap-2">
     <li v-for="{ id, title, done } of events" :key="id">
-      <EventItem :id="id" :title="title" :done="done" />
+      <EventItem :id="id" :title="title" :done="done" @delete="deleteEvent" />
     </li>
   </ul>
 </template>
